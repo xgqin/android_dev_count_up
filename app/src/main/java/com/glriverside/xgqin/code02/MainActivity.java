@@ -10,18 +10,35 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Locale;
+
 public class MainActivity extends AppCompatActivity {
 
     private static final String COUNT_VALUE = "count_value";
     private int count = 0;
     private TextView tvCount;
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        count = savedInstanceState.getInt(COUNT_VALUE, 0);
+        if (tvCount != null) {
+            tvCount.setText(String.format(Locale.CHINESE, "%d", count));
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt(COUNT_VALUE, count);
+        super.onSaveInstanceState(outState);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         tvCount = findViewById(R.id.tvCount);
-
 
         Button btnShowToast = findViewById(R.id.btnShowToast);
         btnShowToast.setOnClickListener(new View.OnClickListener(){
@@ -36,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         btnCount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                tvCount.setText(Integer.toString(++count));
+                tvCount.setText(String.format(Locale.CHINA, "%d", ++count));
             }
         });
     }
